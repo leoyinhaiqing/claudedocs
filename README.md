@@ -114,6 +114,22 @@ Reverse-engineered from the [`@anthropic-ai/claude-code` v2.1.88](https://www.np
 
 Used via the `/claude-docs` skill (defined in `~/.claude/skills/claude-docs/SKILL.md`). The skill matches user questions to files via a keyword routing table and loads only the relevant file(s).
 
+## Future: progressive disclosure for this repo itself
+
+This repo currently has 45 files totaling ~12,000 lines. The `/claude-docs` skill routes by keyword and loads 1-2 files per question — manageable today.
+
+As the repo grows (more articles, deeper internals analysis, new Claude Code versions), the routing table approach may hit limits:
+- Too many routing entries make the skill definition itself a context burden
+- Overlapping keywords cause wrong-file matches
+- A single file growing past ~300 lines becomes too dense for a single load
+
+When that happens, consider applying the same progressive disclosure pattern used in `internals/`:
+- **Index files per directory** — each directory gets an `index.md` that summarizes its contents and points to detail files (like `internals/index.md` already does)
+- **Tiered loading** — the skill loads the directory index first, then the specific file only if needed
+- **Split large files** — any file past ~250 lines should be split into a conceptual top half and a reference bottom half, or into separate files
+
+The `internals/` directory already demonstrates this pattern. The rest of the repo (`articles/`, `reference-docs/`, etc.) doesn't need it yet — each file is self-contained and under 200 lines. But the design is there to replicate when the time comes.
+
 ## Sources
 
 - **Official docs:** [code.claude.com/docs](https://code.claude.com/docs/en/overview) (cached 2026-03-14)
