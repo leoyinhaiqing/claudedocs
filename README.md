@@ -114,6 +114,8 @@ Reverse-engineered from the [`@anthropic-ai/claude-code` v2.1.88](https://www.np
 
 Used via the `/claude-docs` skill (defined in `~/.claude/skills/claude-docs/SKILL.md`). The skill matches user questions to files via a keyword routing table and loads only the relevant file(s).
 
+You can also just say `read ~/claudedocs` to let Claude explore the knowledge base directly — start with `manifest.md` for the full file index, or `internals/index.md` for the harness architecture overview.
+
 ## Future: progressive disclosure for this repo itself
 
 This repo currently has 45 files totaling ~12,000 lines. The `/claude-docs` skill routes by keyword and loads 1-2 files per question — manageable today.
