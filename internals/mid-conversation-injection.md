@@ -1,4 +1,4 @@
-# Mid-Conversation Injection & Error Message Engineering
+﻿# Mid-Conversation Injection & Error Message Engineering
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

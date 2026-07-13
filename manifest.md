@@ -1,7 +1,33 @@
 # Claude Docs Manifest
 
-Local cache of Claude Code official documentation. Fetched: 2026-03-14.
-Source: https://code.claude.com/docs/
+Local cache of Claude Code official documentation.
+Source: https://code.claude.com/docs/ (raw markdown, per-page `<slug>.md`)
+Fetched: 2026-07-13 (Claude Code CLI v2.1.203)
+
+## How to check for staleness later
+
+This cache is a point-in-time snapshot of the official pages listed below. To
+re-check whether it has fallen behind upstream — without re-discovering the
+method each time:
+
+1. **Coverage gap** — fetch `https://code.claude.com/docs/llms.txt` (the
+   authoritative upstream page index) and compare its page list against the
+   files below. Upstream pages absent here are coverage gaps.
+2. **Content drift** — read the upstream `whats-new/` weekly changelog pages
+   (`https://code.claude.com/docs/en/whats-new/2026-wNN.md`) dated *after* the
+   `Fetched:` date above. Each week enumerates feature / setting / flag /
+   command changes; any entry touching a topic below means that cached page is
+   behind.
+3. **Refresh** — re-pull is reproducible: the cache is Mintlify raw markdown,
+   so `curl -s https://code.claude.com/docs/en/<slug>.md > <local file>` for
+   each page below, then bump the `Fetched:` date + CLI version on the line
+   above. Always refresh the whole set together so that single date stays
+   accurate for every file.
+
+`internals/` and `articles/` are NOT part of this official-docs snapshot and
+are excluded from the checks above: `articles/` are external engineering blog
+posts / tweets; `internals/` are reverse-engineered from a pinned CLI version
+and refresh only by re-deriving against a newer build.
 
 ## agents-docs/
 
@@ -10,6 +36,12 @@ Source: https://code.claude.com/docs/
 | `sub-agents.md` | Subagent definition & config | Frontmatter fields, tool restrictions, permission modes, hooks in agents, memory, skill preloading, resume pattern |
 | `agent-teams.md` | Multi-session agent teams | Team lead/teammate architecture, task list, mailbox, parallel work patterns, comparison with subagents |
 | `headless.md` | Programmatic / Agent SDK | `-p` flag, `--output-format json/stream-json`, `--allowedTools`, `--continue`/`--resume`, system prompt flags |
+| `workflows.md` | Dynamic workflows | Claude-authored orchestration scripts over many background subagents; `Workflow` tool, phases, `pipeline`/`parallel`, `ultracode` opt-in |
+| `worktrees.md` | Parallel sessions with worktrees | Isolated sessions in git worktrees, `isolation: worktree`, `EnterWorktree`, auto-cleanup |
+| `agent-view.md` | Agent view / manage sessions | `claude agents` dashboard, attach/detach, background execution, nested-agent tree |
+| `agents.md` | Run agents in parallel | Launching and coordinating multiple parallel agent sessions |
+| `routines.md` | Routines (scheduled cloud agents) | Cron / GitHub-event / API-triggered cloud agents, `/schedule`, tokened `/fire` endpoint |
+| `remote-control.md` | Remote control | Continue local sessions from any device, mobile push, permission relay |
 
 ## skills-docs/
 
@@ -38,6 +70,12 @@ Source: https://code.claude.com/docs/
 | `cli-reference.md` | CLI flags & commands | All `claude` CLI flags, `--agents`, `--model`, `--allowedTools`, `--output-format`, etc. |
 | `commands.md` | Built-in slash commands | Full reference for `/compact`, `/clear`, `/model`, `/permissions`, `/hooks`, `/agents`, etc. |
 | `env-vars.md` | Environment variables | All env vars controlling Claude Code behavior, model overrides, feature flags |
+| `permission-modes.md` | Permission modes | `auto` / `manual` / `plan` / `acceptEdits` / `bypassPermissions`; classifier-based auto mode |
+| `fast-mode.md` | Fast mode | High-speed Opus configuration, `/fast`, pricing tier |
+| `context-window.md` | Context window | Context budget, compaction, microcompact, context management |
+| `sandboxing.md` | Sandboxed Bash | Configuring the sandboxed Bash tool, sandbox rules, credentials |
+| `sandbox-environments.md` | Sandbox environments | Choosing a sandbox environment, OS-level isolation |
+| `security-guidance.md` | Security guidance | Catch security issues as Claude writes code, security-guidance plugin |
 
 ## guides-docs/
 
@@ -47,8 +85,16 @@ Source: https://code.claude.com/docs/
 | `scheduled-tasks.md` | Scheduled tasks | `/loop`, `CronCreate`/`CronList`/`CronDelete`, one-time reminders, cron expression reference |
 | `terminal-config.md` | Terminal setup | Line breaks, notifications, Vim mode, terminal optimization |
 | `checkpointing.md` | Checkpointing | Track/rewind/summarize edits and conversation state |
-| `channels.md` | Channels | Push events into running sessions via MCP; Telegram/Discord setup, fakechat quickstart, sender allowlists, pairing, enterprise controls, research preview |
 | `best-practices.md` | Best practices | Context management, CLAUDE.md authoring, prompting patterns, parallel sessions, automation, common failure patterns |
+| `channels.md` | Channels (push events into a running session) | Channel plugins, Telegram / iMessage setup, permission relay, enterprise controls (`channelsEnabled` / `allowedChannelPlugins`) |
+| `channels-reference.md` | Channels reference | Channel plugin schema, event types, permission-relay capability, enterprise controls |
+| `code-review.md` | Code review | `/code-review` skill, effort levels, `--comment` / `--fix`, subagent diff review |
+| `ultrareview.md` | Ultrareview | Cloud multi-agent adversarial code review, CI subcommand |
+| `artifacts.md` | Artifacts | `Artifact` tool, publish interactive pages to claude.ai, update-in-place |
+| `goal.md` | Goal-directed work | `/goal`, autonomous multi-turn work toward a verifiable completion condition |
+| `interactive-mode.md` | Interactive mode | Keyboard shortcuts, input modes, session interaction |
+| `keybindings.md` | Keybindings | Customize keyboard shortcuts, `~/.claude/keybindings.json`, chords |
+| `statusline.md` | Status line | Customize the status line, `statusLine` setting, refresh interval |
 
 ## plugins-docs/
 
@@ -57,38 +103,16 @@ Source: https://code.claude.com/docs/
 | `plugins.md` | Create plugins | Plugin structure, skills/hooks/MCP in plugins, local testing, distribution |
 | `plugins-reference.md` | Plugins reference | Full manifest schema, all component schemas, CLI commands, scopes, caching, debugging |
 
-## internals/
+## agent-sdk-docs/
 
-Reverse-engineered source-level analysis of Claude Code's harness implementation (from `@anthropic-ai/claude-code` v2.1.88 source map). Not official docs — use for understanding how the harness is actually built.
-
-**Progressive disclosure:** Start with `index.md` for architecture and design decisions. Each detail file has a "How it works" top half (conceptual) and "Implementation reference" bottom half (TypeScript, source paths).
+Core subset of the Agent SDK section (not the full ~34-page SDK area — see the
+staleness recipe above to pull more from `agent-sdk/` on demand).
 
 | File | Topic | Key content |
 |------|-------|-------------|
-| `index.md` | **Architecture overview** | Flow diagram, 5 subsystem summaries with key design decisions and numbers, pointers to detail files |
-| `system-prompt-and-context.md` | System prompt & context injection | Prompt priority, static/dynamic split, cache boundary, prompt text excerpts, two context channels, git status, CLAUDE.md hierarchy, memory directory |
-| `tool-framework.md` | Tool system & permissions | Tool definition, registration, execution pipeline (8 phases), result persistence, concurrency, permission modes/rules/decision flow |
-| `turn-loop.md` | Core loop & compaction | while(true) loop, immutable State, 6 phases, stop/continue conditions, API streaming, 5-layer compaction, progressive error recovery |
-| `hooks-and-extensibility.md` | Hooks, agents & skills | 4 hook types, 25 events, execution mechanisms, SSRF protection, AgentTool, fork subagents, verification agent, skill loading |
-| `design-patterns.md` | Patterns, model config & safety | Model selection, extended thinking, fast mode, cost tracking, token budgets, 8-layer safety, enterprise policies, architectural patterns |
-| `verification-agent.md` | Verification agent deep dive | Adversarial system prompt, anti-rationalization list, 11 type-specific strategies, evidence format, tool restrictions, trigger mechanisms, design lessons |
-| `internal-prompts.md` | Internal harness prompts | Compaction (9-section summary, analysis stripping, cache-safe forking), auto-mode classifier (two-stage, PowerShell rules), session memory (10-section template), built-in agent prompts and design patterns |
-| `tool-prompts.md` | Tool description engineering | Layered reinforcement pattern, Bash tool (git commit/PR protocols, sandbox, safety), FileEdit (read-first), Agent (fork vs spawn, prompt authoring), Grep/Glob (exclusivity), anti-patterns |
-| `mid-conversation-injection.md` | Runtime injection & errors | `<system-reminder>` 5 patterns (user context, recurring attachments, hooks, warnings, side questions), permission denial steering, rejection memory hints, validation recovery instructions |
-
-## articles/
-
-Engineering blog articles and practitioner insights. Date indicates original publication — check for staleness on rapidly evolving topics.
-
-| File | Date | Topic | Key content |
-|------|------|-------|-------------|
-| `building-effective-agents.md` | 2024-09-19 | Agent architecture patterns | Workflows vs agents, 5 workflow patterns (chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer), tool prompt engineering, ACI design |
-| `claude-think-tool.md` | 2025-01-06 | Think tool for mid-chain reasoning | Think tool vs extended thinking, tau-bench results, optimized prompt patterns, when to use vs not |
-| `multi-agent-research-system.md` | 2025-04-18 | Anthropic's Research multi-agent | Orchestrator-worker architecture, 90% improvement over single-agent, prompt engineering for delegation/scaling/tool selection, eval design |
-| `writing-tools-for-agents.md` | 2025-06-26 | Tool design for agents | Prototype→eval→collaborate loop, choosing/namespacing/designing tools, token-efficient responses, eval task design |
-| `context-engineering.md` | 2025-09-17 | Context engineering for agents | Context rot, attention budget, just-in-time retrieval, compaction/note-taking/sub-agents for long-horizon, hybrid retrieval strategy |
-| `effective-harnesses.md` | 2025-11-24 | Long-running agent harnesses | Initializer+coding agent pattern, feature list JSON, incremental progress, session startup sequence, failure modes table |
-| `harness-design-long-running-apps.md` | 2026-03-06 | GAN-inspired multi-agent harness | Generator-evaluator separation, context anxiety vs compaction, sprint contracts, Playwright MCP for QA, 3-agent full-stack architecture |
-| `prompt-caching-lessons.md` | 2026-02-19 | Prompt caching in agents | Cache hit mechanics, prefix matching, cache-breaking pitfalls, compaction interaction |
-| `seeing-like-an-agent.md` | 2026-02-27 | Agent perception & tool design | Action space design, elicitation, progressive disclosure |
-| `how-we-use-skills.md` | 2026-03-17 | Skills system in practice | Skill categories, tips, gotchas, distribution, on-demand hooks |
+| `overview.md` | Agent SDK overview | What the SDK is, when to use it, capabilities, language bindings |
+| `agent-loop.md` | Agent loop | How the SDK agent loop works, turn cycle, tool execution |
+| `subagents.md` | Subagents in the SDK | Defining / spawning subagents programmatically |
+| `permissions.md` | SDK permissions | `canUseTool` callback, permission modes, `managedSettings` |
+| `custom-tools.md` | Custom tools | Give Claude custom tools via the SDK, in-process MCP |
+| `structured-outputs.md` | Structured outputs | Force schema-validated output from agents |

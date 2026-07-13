@@ -1,4 +1,4 @@
-# Hooks, Agents & Skills
+﻿# Hooks, Agents & Skills
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

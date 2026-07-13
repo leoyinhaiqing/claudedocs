@@ -1,4 +1,4 @@
-# Building Effective Agents
+﻿# Building Effective Agents
 
 *By Erik Schluntz and Barry Zhang, Anthropic — 2024-09-19*
 *Source: https://www.anthropic.com/engineering/building-effective-agents*

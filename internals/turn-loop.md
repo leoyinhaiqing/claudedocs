@@ -1,4 +1,4 @@
-# Turn Loop & Compaction
+﻿# Turn Loop & Compaction
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

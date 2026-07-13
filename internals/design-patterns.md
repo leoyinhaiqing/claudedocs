@@ -1,4 +1,4 @@
-# Design Patterns, Model Config & Safety
+﻿# Design Patterns, Model Config & Safety
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

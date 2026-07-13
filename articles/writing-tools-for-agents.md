@@ -1,4 +1,4 @@
-# Writing Effective Tools for Agents — with Agents
+﻿# Writing Effective Tools for Agents — with Agents
 
 *By Anthropic — 2025-06-26*
 *Source: https://www.anthropic.com/engineering/writing-tools-for-agents*

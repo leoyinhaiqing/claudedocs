@@ -1,4 +1,4 @@
-# Verification Agent: Adversarial Quality Checking
+﻿# Verification Agent: Adversarial Quality Checking
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

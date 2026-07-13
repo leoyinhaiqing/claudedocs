@@ -1,4 +1,4 @@
-# Tool Framework & Permission System
+﻿# Tool Framework & Permission System
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

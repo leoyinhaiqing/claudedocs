@@ -18,13 +18,15 @@ But this repo serves a different purpose: **building harness engineering for oth
 
 The Guide agent can't do this — it searches official docs, not source internals. And web fetching loads too much noise when you need a specific design decision.
 
-The `/claude-docs` skill routes questions to the right file via a keyword table, loads only what's needed, and the progressive disclosure within `internals/` means you get architecture first, implementation detail only when you drill in.
+The `/claude-docs` skill routes questions to the right file via a keyword table, then delegates the reading to a subagent that returns a digest (keeping large doc bodies out of the main context), and the progressive disclosure within `internals/` means you get architecture first, implementation detail only when you drill in.
 
 ## Structure
 
 ```
 claudedocs/
-├── manifest.md                  # File index with descriptions
+├── SKILL.md                     # The /claude-docs skill (routing table + subagent-digest model)
+├── manifest.md                  # File index + staleness-recheck / refresh recipe
+├── NOTES.md                     # Personal notes on Claude Code context construction
 │
 ├── reference-docs/              # Claude Code configuration reference
 │   ├── tools-reference.md       #   All tools, permission requirements
@@ -35,12 +37,24 @@ claudedocs/
 │   ├── mcp.md                   #   MCP server config, tool search
 │   ├── cli-reference.md         #   CLI flags and options
 │   ├── commands.md              #   Built-in slash commands
-│   └── env-vars.md              #   Environment variables
+│   ├── env-vars.md              #   Environment variables
+│   ├── permission-modes.md      #   auto/manual/plan/acceptEdits/bypass
+│   ├── fast-mode.md             #   /fast, high-speed Opus
+│   ├── context-window.md        #   Context budget, compaction
+│   ├── sandboxing.md            #   Sandboxed Bash tool
+│   ├── sandbox-environments.md  #   Choose a sandbox environment
+│   └── security-guidance.md     #   Catch security issues while coding
 │
-├── agents-docs/                 # Agent system
+├── agents-docs/                 # Agent system, orchestration, sessions
 │   ├── sub-agents.md            #   Subagent definitions, frontmatter
 │   ├── agent-teams.md           #   Multi-session teams, mailbox
-│   └── headless.md              #   SDK, -p flag, CI/CD
+│   ├── headless.md              #   CLI -p / programmatic use
+│   ├── workflows.md             #   Dynamic multi-subagent orchestration
+│   ├── worktrees.md             #   Parallel sessions in git worktrees
+│   ├── agent-view.md            #   claude agents dashboard
+│   ├── agents.md                #   Run agents in parallel
+│   ├── routines.md              #   Scheduled cloud agents
+│   └── remote-control.md        #   Continue sessions from any device
 │
 ├── skills-docs/                 # Skills system
 │   ├── skills.md                #   SKILL.md format, invocation
@@ -50,17 +64,33 @@ claudedocs/
 │   ├── hooks.md                 #   Hook events, schema, reference
 │   └── hooks-guide.md           #   Practical patterns, setup
 │
-├── guides-docs/                 # Usage guides
+├── guides-docs/                 # Usage guides, terminal/UI, review, artifacts
 │   ├── best-practices.md        #   Context management, prompting
 │   ├── checkpointing.md         #   Track/rewind session state
 │   ├── output-styles.md         #   Custom output styles
 │   ├── scheduled-tasks.md       #   /loop, cron scheduling
-│   ├── channels.md              #   Push events, Telegram/Discord
-│   └── terminal-config.md       #   Terminal setup, Vim mode
+│   ├── channels.md              #   Push events, Telegram/iMessage
+│   ├── channels-reference.md    #   Channel plugin schema
+│   ├── terminal-config.md       #   Terminal setup, Vim mode, themes
+│   ├── interactive-mode.md      #   Input modes, session interaction
+│   ├── keybindings.md           #   Customize keyboard shortcuts
+│   ├── statusline.md            #   Customize the status line
+│   ├── code-review.md           #   /code-review, diff review
+│   ├── ultrareview.md           #   Cloud multi-agent review
+│   ├── artifacts.md             #   Artifact tool, publish pages
+│   └── goal.md                  #   /goal, autonomous goal-directed work
 │
 ├── plugins-docs/                # Plugin system
 │   ├── plugins.md               #   Plugin structure, distribution
 │   └── plugins-reference.md     #   Manifest schema, component specs
+│
+├── agent-sdk-docs/              # Agent SDK library (core subset)
+│   ├── overview.md              #   SDK overview, capabilities
+│   ├── agent-loop.md            #   How the SDK agent loop works
+│   ├── subagents.md             #   Programmatic subagents
+│   ├── permissions.md           #   canUseTool, permission modes
+│   ├── custom-tools.md          #   In-process MCP custom tools
+│   └── structured-outputs.md    #   Schema-validated output
 │
 ├── articles/                    # Anthropic engineering blog posts
 │   ├── building-effective-agents.md
@@ -112,13 +142,13 @@ Reverse-engineered from the [`@anthropic-ai/claude-code` v2.1.88](https://www.np
 
 ## Usage
 
-Used via the `/claude-docs` skill (defined in `~/.claude/skills/claude-docs/SKILL.md`). The skill matches user questions to files via a keyword routing table and loads only the relevant file(s).
+Used via the `/claude-docs` skill — its definition (`SKILL.md`) ships in this repo; install it by placing it at `~/.claude/skills/claude-docs/SKILL.md`, and clone this repo to `~/claudedocs` (the routing table uses `~/claudedocs/` paths). The skill matches questions to files via a keyword routing table, then **delegates the reading to a subagent that returns a digest** — keeping large doc bodies out of the main context.
 
-You can also just say `read ~/claudedocs` to let Claude explore the knowledge base directly — start with `manifest.md` for the full file index, or `internals/index.md` for the harness architecture overview.
+You can also just say `read ~/claudedocs` to let Claude explore the knowledge base directly — start with `manifest.md` for the full file index (and its staleness-recheck / refresh recipe), or `internals/index.md` for the harness architecture overview.
 
 ## Future: progressive disclosure for this repo itself
 
-This repo currently has 45 files totaling ~12,000 lines. The `/claude-docs` skill routes by keyword and loads 1-2 files per question — manageable today.
+This repo currently has 74 markdown files totaling ~30,000 lines. The `/claude-docs` skill routes by keyword and now delegates the actual reading to a subagent (digest), so the main context stays light even as the file count grows — manageable today.
 
 As the repo grows (more articles, deeper internals analysis, new Claude Code versions), the routing table approach may hit limits:
 - Too many routing entries make the skill definition itself a context burden
@@ -134,6 +164,6 @@ The `internals/` directory already demonstrates this pattern. The rest of the re
 
 ## Sources
 
-- **Official docs:** [code.claude.com/docs](https://code.claude.com/docs/en/overview) (cached 2026-03-14)
+- **Official docs:** [code.claude.com/docs](https://code.claude.com/docs/en/overview) (cached 2026-07-13, CLI v2.1.203)
 - **Articles:** Anthropic engineering blog posts (dates noted in each file)
 - **Internals:** Source map of `@anthropic-ai/claude-code@2.1.88` — all rights belong to Anthropic

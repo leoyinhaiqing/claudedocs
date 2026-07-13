@@ -1,4 +1,4 @@
-# The "Think" Tool: Enabling Claude to Stop and Think
+﻿# The "Think" Tool: Enabling Claude to Stop and Think
 
 *By Anthropic — 2025-01-06*
 *Source: https://www.anthropic.com/engineering/claude-think-tool*

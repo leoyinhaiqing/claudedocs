@@ -1,4 +1,4 @@
-# Harness Design for Long-Running Application Development
+﻿# Harness Design for Long-Running Application Development
 
 *By Prithvi Rajasekaran, Anthropic Labs — 2026-03-06*
 *Source: https://www.anthropic.com/engineering/harness-design-long-running-apps*

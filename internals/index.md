@@ -1,4 +1,4 @@
-# Claude Code Harness Architecture
+﻿# Claude Code Harness Architecture
 
 *Source: Reverse-engineered from `@anthropic-ai/claude-code` v2.1.88 source map*
 

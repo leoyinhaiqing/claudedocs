@@ -1,4 +1,4 @@
-# Effective Harnesses for Long-Running Agents
+﻿# Effective Harnesses for Long-Running Agents
 
 *By Justin Young, Anthropic — 2025-11-24*
 *Source: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents*
