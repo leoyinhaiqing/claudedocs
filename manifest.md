@@ -2,7 +2,9 @@
 
 Local cache of Claude Code official documentation.
 Source: https://code.claude.com/docs/ (raw markdown, per-page `<slug>.md`)
-Fetched: 2026-07-13 (Claude Code CLI v2.1.203)
+Fetched: 2026-07-13 (Claude Code CLI v2.1.203). 13 pages added 2026-07-19 to
+close coverage gaps found against `llms.txt` (`chrome.md` plus 12 more — see
+their table rows below for the full list).
 
 ## How to check for staleness later
 
@@ -61,6 +63,14 @@ and refresh only by re-deriving against a newer build.
 
 | File | Topic | Key content |
 |------|-------|-------------|
+| `overview.md` | Claude Code overview | What Claude Code is, where it runs (terminal/IDE/desktop/browser) |
+| `how-claude-code-works.md` | How it works | Agentic loop, built-in tools, how Claude interacts with your project (official counterpart to `internals/index.md`) |
+| `claude-directory.md` | The `.claude` directory | Where CLAUDE.md, settings.json, hooks, skills, commands, subagents, workflows, rules, and auto memory live, project vs `~/.claude` |
+| `auto-mode-config.md` | Auto mode trust config | Trusted repos/buckets/domains, environment context, default block/allow rule overrides, auto-mode CLI subcommands |
+| `prompt-caching.md` | Prompt caching mechanics | Why a model switch triggers an uncached turn, `/compact` cost, CLAUDE.md edit timing, checking cache hit rate |
+| `sessions.md` | Session management | `--continue`/`--resume`/`--from-pr`, `/resume` picker, session naming, exporting transcripts, transcript storage |
+| `glossary.md` | Terminology | Definitions: agentic loop, compaction, CLAUDE.md, hooks, subagents, MCP, and other core terms |
+| `errors.md` | Error reference | Runtime error messages, meaning, and fixes |
 | `tools-reference.md` | All available tools | Full tool list with permission requirements, Bash persistence behavior |
 | `permissions.md` | Permission system | Rule syntax, permission modes, Bash/Read/Edit/WebFetch/MCP/Agent rules, managed settings |
 | `model-config.md` | Model selection | Aliases (sonnet/opus/haiku/opusplan), effort levels, 1M context, env vars, per-subagent model |
@@ -92,6 +102,11 @@ and refresh only by re-deriving against a newer build.
 | `ultrareview.md` | Ultrareview | Cloud multi-agent adversarial code review, CI subcommand |
 | `artifacts.md` | Artifacts | `Artifact` tool, publish interactive pages to claude.ai, update-in-place |
 | `goal.md` | Goal-directed work | `/goal`, autonomous multi-turn work toward a verifiable completion condition |
+| `chrome.md` | Claude in Chrome | `--chrome` flag, `/chrome` setup & permissions, plan-mode read/write tool split, example workflows, troubleshooting |
+| `computer-use.md` | Computer use (macOS) | Native app control from the CLI when a task can't be done in a browser; pairs with `chrome.md` |
+| `ultraplan.md` | Ultraplan | Draft a plan in the cloud from the CLI, execute remotely or back in the terminal; pairs with `ultrareview.md` |
+| `debug-your-config.md` | Debug configuration | Diagnose CLAUDE.md/settings/hooks/MCP/skills not taking effect via `/context`, `/doctor`, `/hooks`, `/mcp` |
+| `advisor.md` | Advisor tool | Pair the main model with a stronger advisor model consulted at key decision points |
 | `interactive-mode.md` | Interactive mode | Keyboard shortcuts, input modes, session interaction |
 | `keybindings.md` | Keybindings | Customize keyboard shortcuts, `~/.claude/keybindings.json`, chords |
 | `statusline.md` | Status line | Customize the status line, `statusLine` setting, refresh interval |

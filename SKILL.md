@@ -1,6 +1,6 @@
 ---
 name: claude-docs
-description: Loads official Claude Code documentation from a local cache (`~/claudedocs/`) and answers grounded in it — delegating the actual doc-reading to a subagent so large doc bodies stay out of the main context. Triggers when the user asks about Claude Code features, configuration, or capabilities — including subagents, agent teams, workflows, worktrees, routines, skills, hooks, permissions & permission modes, MCP, settings, model config, CLI flags, commands, env vars, plugins, channels, code review, artifacts, sandboxing, the Agent SDK, or internal harness architecture. Also triggers on "check the docs", "how does Claude Code handle X", or any "can Claude Code..." / "does Claude Code..." / "how do I..." question about Claude Code itself.
+description: Loads official Claude Code documentation from a local cache (`~/claudedocs/`) and answers grounded in it — delegating the actual doc-reading to a subagent so large doc bodies stay out of the main context. Triggers when the user asks about Claude Code features, configuration, or capabilities — including subagents, agent teams, workflows, worktrees, routines, skills, hooks, permissions & permission modes, MCP, settings, model config, CLI flags, commands, env vars, plugins, channels, code review, artifacts, sandboxing, the Agent SDK, Claude in Chrome / browser automation, computer use, auto mode config, prompt caching, session management, the advisor tool, config debugging, or internal harness architecture. Also triggers on "check the docs", "how does Claude Code handle X", or any "can Claude Code..." / "does Claude Code..." / "how do I..." question about Claude Code itself.
 ---
 
 # Claude Docs
@@ -66,6 +66,14 @@ subagent. Most questions need one file; cross-cutting questions may need two.
 ### reference-docs/ — tools, permissions, config
 | Topic keywords | File path |
 |----------------|-----------|
+| what is Claude Code, overview, where it runs | `~/claudedocs/reference-docs/overview.md` |
+| how Claude Code works, agentic loop (official), built-in tools overview | `~/claudedocs/reference-docs/how-claude-code-works.md` |
+| `.claude` directory, project vs `~/.claude`, where config files live | `~/claudedocs/reference-docs/claude-directory.md` |
+| auto mode trusted repos/domains, environment context, auto-mode CLI subcommands | `~/claudedocs/reference-docs/auto-mode-config.md` |
+| prompt caching, cache hit rate, cache break, `/compact` cost, CLAUDE.md edit timing (official) | `~/claudedocs/reference-docs/prompt-caching.md` |
+| session management, `--continue`, `--resume`, `--from-pr`, `/resume`, transcript export | `~/claudedocs/reference-docs/sessions.md` |
+| glossary, terminology, what does X mean | `~/claudedocs/reference-docs/glossary.md` |
+| error message, error reference, what does this error mean | `~/claudedocs/reference-docs/errors.md` |
 | tool list, tool permissions, Bash persistence, per-tool behavior | `~/claudedocs/reference-docs/tools-reference.md` |
 | permission rules, deny/allow syntax, `Tool(param:value)` matching, managed settings | `~/claudedocs/reference-docs/permissions.md` |
 | permission mode, auto mode, manual mode, plan mode, acceptEdits, bypassPermissions | `~/claudedocs/reference-docs/permission-modes.md` |
@@ -99,6 +107,11 @@ subagent. Most questions need one file; cross-cutting questions may need two.
 | ultrareview, cloud multi-agent review, adversarial review in CI | `~/claudedocs/guides-docs/ultrareview.md` |
 | artifact, `Artifact` tool, publish interactive page to claude.ai | `~/claudedocs/guides-docs/artifacts.md` |
 | goal, `/goal`, autonomous work toward a completion condition | `~/claudedocs/guides-docs/goal.md` |
+| Claude in Chrome, `--chrome` flag, `/chrome`, browser automation, `mcp__claude-in-chrome__*`, browser tools in plan mode | `~/claudedocs/guides-docs/chrome.md` |
+| computer use, control macOS apps, native app automation | `~/claudedocs/guides-docs/computer-use.md` |
+| ultraplan, plan in the cloud, draft plan then execute remotely | `~/claudedocs/guides-docs/ultraplan.md` |
+| debug config, `/context`, `/doctor`, why isn't my hook/MCP/skill loading | `~/claudedocs/guides-docs/debug-your-config.md` |
+| advisor tool, escalate to a stronger model, second opinion mid-task | `~/claudedocs/guides-docs/advisor.md` |
 
 ### plugins-docs/ — plugins
 | Topic keywords | File path |

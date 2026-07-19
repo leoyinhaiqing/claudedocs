@@ -29,6 +29,14 @@ claudedocs/
 ├── NOTES.md                     # Personal notes on Claude Code context construction
 │
 ├── reference-docs/              # Claude Code configuration reference
+│   ├── overview.md              #   What Claude Code is, where it runs
+│   ├── how-claude-code-works.md #   Agentic loop, built-in tools (official)
+│   ├── claude-directory.md      #   .claude/ layout: CLAUDE.md, settings, hooks, skills...
+│   ├── auto-mode-config.md      #   Trusted repos/domains, auto-mode CLI
+│   ├── prompt-caching.md        #   Cache hit rate, /compact cost, cache breaks
+│   ├── sessions.md              #   --continue/--resume/--from-pr, /resume
+│   ├── glossary.md              #   Claude Code terminology
+│   ├── errors.md                #   Runtime error reference
 │   ├── tools-reference.md       #   All tools, permission requirements
 │   ├── permissions.md           #   Permission rules, modes, managed settings
 │   ├── settings.md              #   Settings fields, file locations, precedence
@@ -78,7 +86,12 @@ claudedocs/
 │   ├── code-review.md           #   /code-review, diff review
 │   ├── ultrareview.md           #   Cloud multi-agent review
 │   ├── artifacts.md             #   Artifact tool, publish pages
-│   └── goal.md                  #   /goal, autonomous goal-directed work
+│   ├── goal.md                  #   /goal, autonomous goal-directed work
+│   ├── chrome.md                #   Claude in Chrome, --chrome, browser automation
+│   ├── computer-use.md          #   macOS native app control (pairs with chrome.md)
+│   ├── ultraplan.md             #   Cloud planning (pairs with ultrareview.md)
+│   ├── debug-your-config.md     #   /context, /doctor, /hooks, /mcp diagnostics
+│   └── advisor.md               #   Advisor tool: consult a stronger model mid-task
 │
 ├── plugins-docs/                # Plugin system
 │   ├── plugins.md               #   Plugin structure, distribution
@@ -148,7 +161,7 @@ You can also just say `read ~/claudedocs` to let Claude explore the knowledge ba
 
 ## Future: progressive disclosure for this repo itself
 
-This repo currently has 74 markdown files totaling ~30,000 lines. The `/claude-docs` skill routes by keyword and now delegates the actual reading to a subagent (digest), so the main context stays light even as the file count grows — manageable today.
+This repo currently has 87 markdown files. The `/claude-docs` skill routes by keyword and now delegates the actual reading to a subagent (digest), so the main context stays light even as the file count grows — manageable today.
 
 As the repo grows (more articles, deeper internals analysis, new Claude Code versions), the routing table approach may hit limits:
 - Too many routing entries make the skill definition itself a context burden
